@@ -4,20 +4,26 @@ import Error from './Error';
 
 const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
     const [nombre, setNombre] = useState("")
-    const [propietario, setPropietario] = useState("")
-    const [email, setEmail] = useState("");
+    const [apellido, setApellido] = useState("")
+    const [dni, setDni] = useState("");
+    const [direccion, setDireccion] = useState("");
+    const [telefono, setTelefono] = useState("");
     const [fecha, setFecha] = useState("");
-    const [sintomas, setSintomas] = useState("");
+    const [actividad, setActividad] = useState("");
+    const [horario, setHorario] = useState("");
 
     const [error, setError] = useState(false)
 
     useEffect(() => {
         if (Object.keys(paciente).length > 0) {
             setNombre(paciente.nombre)
-            setPropietario(paciente.propietario)
-            setEmail(paciente.email)
+            setApellido(paciente.apellido)
+            setDni(paciente.dni)
+            setDireccion(paciente.direccion)
+            setTelefono(paciente.telefono)
             setFecha(paciente.fecha)
-            setSintomas(paciente.sintomas)
+            setActividad(paciente.actividad)
+            setHorario(paciente.setHorario)
         }
     }, [paciente])
 
@@ -34,7 +40,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         //validacion de formulario
-        if ([nombre, propietario, email, fecha, sintomas].includes("")) {
+        if ([nombre, apellido, dni, direccion, telefono, fecha, actividad, horario].includes("")) {
             setError(true)
             return;
         }
@@ -42,10 +48,13 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
         //creamos el objeto paciente
         const objPaciente = {
             nombre,
-            propietario,
-            email,
+            apellido,
+            dni,
+            direccion,
+            telefono,
             fecha,
-            sintomas
+            actividad,
+            horario
         }
 
         if (paciente.id) {
@@ -58,7 +67,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
 
         } else {
             //Nuevo objeto
-            paciente.id = generarId()
+            objPaciente.id = generarId()
             setPacientes([...pacientes, objPaciente])
 
         }
@@ -87,52 +96,82 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                     <Error><p>Todos los campos deben estar completos</p></Error>
                 }
                 <div className='mb-2'>
-                    <label className='block uppercase font-bold text-gray-700' htmlFor="nombre">Nombre Mascota</label>
+                    <label className='block uppercase font-bold text-gray-700' htmlFor="nombre">Nombre</label>
                     <input className='border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-lg'
                         type="text"
                         id='nombre'
-                        placeholder='Nombre de la Mascota'
+                        placeholder='Nombre'
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)} />
                 </div>
 
                 <div className='mb-2'>
-                    <label className='block uppercase font-bold text-gray-700' htmlFor="propietario">Nombre Propietario</label>
+                    <label className='block uppercase font-bold text-gray-700' htmlFor="apellido">Apellido</label>
                     <input className='border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-lg'
                         type="text"
-                        id='propietario'
-                        placeholder='Nombre del Propietario'
-                        value={propietario}
+                        id='apellido'
+                        placeholder='Apellido'
+                        value={apellido}
                         onChange={(e) => setPropietario(e.target.value)} />
                 </div>
 
                 <div className='mb-2'>
-                    <label className='block uppercase font-bold text-gray-700' htmlFor="email">Email</label>
+                    <label className='block uppercase font-bold text-gray-700' htmlFor="dni">DNI</label>
                     <input className='border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-lg'
                         type="text"
-                        id='email'
-                        placeholder='Email del Propietario'
-                        value={email}
+                        id='dni'
+                        placeholder='Dni'
+                        value={dni}
                         onChange={(e) => setEmail(e.target.value)} />
                 </div>
 
                 <div className='mb-2'>
-                    <label className='block uppercase font-bold text-gray-700' htmlFor="alta">Alta</label>
+                    <label className='block uppercase font-bold text-gray-700' htmlFor="direccion">Direccion</label>
                     <input className='border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-lg'
-                        type="date"
-                        id='alta'
-                        value={fecha}
+                        type="text"
+                        id='direccion'
+                        placeholder='Direccion'
+                        value={direccion}
                         onChange={(e) => setFecha(e.target.value)} />
                 </div>
 
                 <div className='mb-2'>
-                    <label className='block uppercase font-bold text-gray-700' htmlFor="sintomas">Síntomas</label>
-                    <textarea className='border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-lg'
-                        id='sintomas'
-                        placeholder='Describa los Síntomas'
-                        value={sintomas}
+                    <label className='block uppercase font-bold text-gray-700' htmlFor="telefono">Teléfono</label>
+                    <input className='border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-lg'
+                        id='telefono'
+                        placeholder='Teléfono de contacto'
+                        value={telefono}
                         onChange={(e) => setSintomas(e.target.value)} />
                 </div>
+
+                <div className='mb-2'>
+                    <label className='block uppercase font-bold text-gray-700' htmlFor="fecha">fecha</label>
+                    <input className='border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-lg'
+                        type="date"
+                        id='fecha'
+                        placeholder='fecha'
+                        value={fecha}
+                        onChange={(e) => setSintomas(e.target.value)} />
+                </div>
+
+                <div className='mb-2'>
+                    <label className='block uppercase font-bold text-gray-700' htmlFor="actividad">actividad</label>
+                    <input className='border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-lg'
+                        type="text"
+                        id='actividad'
+                        placeholder='Actividad'
+                        value={actividad}
+                        onChange={(e) => setSintomas(e.target.value)} />
+                </div>
+
+                <div className='mb-2'>
+                    <label className='block uppercase font-bold text-gray-700' htmlFor="horario">horario</label>
+                    <textarea className='border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-lg'
+                        id='horario'
+                        placeholder='horario'
+                        value={horario}
+                        onChange={(e) => setSintomas(e.target.value)} />
+                </div>              
 
                 <button className='bg-indigo-600  hover:bg-indigo-700 w-full mt-2 mb-2 p-2 rounded-lg transition-colors font-bold uppercase
                 text-white cursor-pointer'
