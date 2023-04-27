@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import Error from './Error';
 
-const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
+const Formulario = ({ pacientes, setPacientes, paciente, setPaciente,enviarPost, enviarPut }) => {
     const [nombre, setNombre] = useState("")
     const [apellido, setApellido] = useState("")
     const [dni, setDni] = useState("");
@@ -16,14 +16,18 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
 
     useEffect(() => {
         if (Object.keys(paciente).length > 0) {
+            var now = new Date();
+            var dateString = now.toLocaleDateString('en-CA')
+
+            console.log(dateString)
             setNombre(paciente.nombre)
             setApellido(paciente.apellido)
             setDni(paciente.dni)
             setDireccion(paciente.direccion)
             setTelefono(paciente.telefono)
-            setFecha(paciente.fecha)
+            setFecha(dateString)
             setActividad(paciente.actividad)
-            setHorario(paciente.setHorario)
+            setHorario(paciente.horario)
         }
     }, [paciente])
 
@@ -36,6 +40,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
 
         return random + fecha
     }
+    
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -63,21 +68,27 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
             const pacientesActualizados = pacientes.map(pacienteState => pacienteState.id ===
                 paciente.id ? objPaciente : pacienteState)
             setPacientes(pacientesActualizados)
+            enviarPut(objPaciente)
+
             setPaciente({})
 
         } else {
             //Nuevo objeto
             objPaciente.id = generarId()
             setPacientes([...pacientes, objPaciente])
+            enviarPost(objPaciente)
 
         }
 
         //reiniciar el form
         setNombre("")
-        setPropietario("")
-        setEmail("")
+        setApellido("")
+        setDni("")
+        setDireccion("")
+        setTelefono("")
         setFecha("")
-        setSintomas("")
+        setActividad("")
+        setHorario("")
     }
 
 
@@ -112,7 +123,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                         id='apellido'
                         placeholder='Apellido'
                         value={apellido}
-                        onChange={(e) => setPropietario(e.target.value)} />
+                        onChange={(e) => setApellido(e.target.value)} />
                 </div>
 
                 <div className='mb-2'>
@@ -122,7 +133,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                         id='dni'
                         placeholder='Dni'
                         value={dni}
-                        onChange={(e) => setEmail(e.target.value)} />
+                        onChange={(e) => setDni(e.target.value)} />
                 </div>
 
                 <div className='mb-2'>
@@ -132,7 +143,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                         id='direccion'
                         placeholder='Direccion'
                         value={direccion}
-                        onChange={(e) => setFecha(e.target.value)} />
+                        onChange={(e) => setDireccion(e.target.value)} />
                 </div>
 
                 <div className='mb-2'>
@@ -141,7 +152,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                         id='telefono'
                         placeholder='Teléfono de contacto'
                         value={telefono}
-                        onChange={(e) => setSintomas(e.target.value)} />
+                        onChange={(e) => setTelefono(e.target.value)} />
                 </div>
 
                 <div className='mb-2'>
@@ -151,7 +162,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                         id='fecha'
                         placeholder='fecha'
                         value={fecha}
-                        onChange={(e) => setSintomas(e.target.value)} />
+                        onChange={(e) => setFecha(e.target.value)} />
                 </div>
 
                 <div className='mb-2'>
@@ -161,7 +172,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                         id='actividad'
                         placeholder='Actividad'
                         value={actividad}
-                        onChange={(e) => setSintomas(e.target.value)} />
+                        onChange={(e) => setActividad(e.target.value)} />
                 </div>
 
                 <div className='mb-2'>
@@ -170,7 +181,7 @@ const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
                         id='horario'
                         placeholder='horario'
                         value={horario}
-                        onChange={(e) => setSintomas(e.target.value)} />
+                        onChange={(e) => setHorario(e.target.value)} />
                 </div>              
 
                 <button className='bg-indigo-600  hover:bg-indigo-700 w-full mt-2 mb-2 p-2 rounded-lg transition-colors font-bold uppercase
