@@ -9,8 +9,10 @@ function App() {
   const [pacientes, setPacientes] = useState([])
   const [paciente, setPaciente] = useState({})
 
-  const enviarPost = async (id, nombre, apellido) => {
-    console.log(`ID : ${id} NOMBRE: ${nombre}  APELLIDO:${apellido}`)
+  const enviarPost = async ({ nombre, apellido, dni, direccion, telefono,
+    fecha, id, actividad, horario }) => {
+    console.log(`NOMBRE: ${nombre}  APELLIDO:${apellido} DNI : ${dni} DIRECCION: ${direccion}  TELEFONO:${telefono}
+    FECHA: ${fecha} ID : ${id} ACTIVIDAD:${actividad} HORARIO:${horario}`)
     try {
       let respuesta = await fetch(url + "/alumnas/agregar", {
         method: "POST",
@@ -18,9 +20,15 @@ function App() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          id: id,
           nombre: nombre,
-          apellido: apellido
+          apellido: apellido,
+          dni: dni,
+          direccion: direccion,
+          telefono: telefono,
+          fecha: fecha,
+          id: id,
+          actividad: actividad,
+          horario: horario
         })
 
       })
@@ -30,33 +38,82 @@ function App() {
       }
       let data = await respuesta.json()
       console.log("Registro creado: ", data)
-      alert("alumno creado cone xito")
+      alert("alumno creado con exito")
 
-      async function fetchData() {
-        try {
-          const response = await fetch(url +'/alumnas');
-          const data = await response.json();
-          setPacientes(data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
       fetchData()
 
     } catch (error) {
       console.error("algo salio mal al crear el registro", error)
     }
+  }
 
+  const enviarPut = async ({ nombre, apellido, dni, direccion, telefono,
+    fecha, id, actividad, horario }) => {
 
+    console.log(`NOMBRE: ${nombre}  APELLIDO:${apellido} DNI : ${dni} DIRECCION: ${direccion}  TELEFONO:${telefono}
+    FECHA: ${fecha} ID : ${id} ACTIVIDAD:${actividad} HORARIO:${horario}`)
+    try {
+      let respuesta = await fetch(url + "/alumnas/" +id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          nombre: nombre,
+          apellido: apellido,
+          dni: dni,
+          direccion: direccion,
+          telefono: telefono,
+          fecha: fecha,
+          id: id,
+          actividad: actividad,
+          horario: horario
+        })
 
+      })
+
+      if (!respuesta.ok) {
+        throw new Error("Error en la solicitud : " + respuesta.statusText)
+      }
+      let data = await respuesta.json()
+      console.log("Registro ACTUALIZADO: ", data)
+      alert("alumno ACTUALIZADO con exito")
+
+      fetchData()
+
+    } catch (error) {
+      console.error("algo salio mal al crear el registro", error)
+    }
+  }
+
+  async function fetchData() {
+    try {
+      const response = await fetch(url + '/alumnas');
+      const data = await response.json();
+      setPacientes(data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 
-  const eliminarPaciente = (id) => {
+  const eliminarPaciente = async (id) => {
 
     const pacientesActualizados = pacientes.filter(pacien => pacien.id !== id)
     setPacientes(pacientesActualizados)
-    console.log(pacientesActualizados)
+    console.log(pacientesActualizados)     
+    const response = await fetch(url + "/alumnas",{
+    
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body:JSON.stringify({
+      id:id})
+  })    
+  const data = await response.json();
+    
+  fetchData();
   }
 
   useEffect(() => {
@@ -84,6 +141,8 @@ function App() {
           setPacientes={setPacientes}
           paciente={paciente}
           setPaciente={setPaciente}
+          enviarPost={enviarPost}
+          enviarPut={enviarPut}
         />
         <ListadoPacientes
           pacientes={pacientes}
